@@ -1,0 +1,475 @@
+@font-face {
+    font-family: 'Hamburguer';
+    src: url('../fonts/Hamburger/HAMBH.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Impact';
+    src: url('../fonts/Impact.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    height: 100%;
+    background-color: #000;
+}
+
+body {
+    height: 100%;
+}
+
+.pseudo-body {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.container {
+    padding-top: 10px;
+    padding-bottom: 1em;
+    height: 90%;
+}
+
+.container .col-md-4 {
+    float: left;
+}
+
+.container .jumbotron,
+.container-fluid .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+
+/* BRAND and ADS */
+
+.brand-container {
+    height: 12em;
+}
+
+.brand-box {
+    display: flex;
+    flex-grow: 1;
+    background-color: #ffffff;
+    border: 1px dashed;
+    align-content: stretch;
+    align-items: center;
+    flex-direction: column;
+    margin: 1em 4em 0em;
+    background-position: center center;
+    background-size: cover;
+    height: 10em;
+}
+
+.ad-box {
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: .2em 1em .7em;
+}
+
+.ad-box-bordered {
+    box-shadow: 0 0 0.10em 0.2em #eee;
+    background-size: cover;
+}
+
+.ad-box-1 {
+    height: 2.1em;
+}
+
+.ad-box-2 {
+    height: 5.1em;
+}
+
+.ad-box-3 {
+    height: 8.1em;
+}
+
+.ad-box-4 {
+    height: 11.1em;
+}
+
+.ad-box-5 {
+    height: 14.1em;
+}
+
+.ad-box-6 {
+    height: 17.1em;
+}
+
+.ad-box-7 {
+    height: 20.1em;
+}
+
+.ad-box-8 {
+    height: 23.1em;
+}
+
+.ad-box-9 {
+    height: 26.1em;
+}
+
+.ad-box-10 {
+    height: 29.1em;
+}
+
+.ad-box-11 {
+    height: 32.1em;
+}
+
+.ad-box-12 {
+    height: 35.1em;
+}
+
+.ad-box-13 {
+    height: 38.1em;
+}
+
+.ad-box-14 {
+    height: 41.1em;
+}
+
+.ad-box-15 {
+    height: 44.1em;
+}
+
+.ad-box-16 {
+    height: 47.1em;
+}
+
+div.product-category {
+    font-size: 1.6em;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #F3FA41;
+    text-align: center;
+}
+
+p.item-number {
+    font-size: 2.5em;
+    text-shadow: 0 0.1em 0.1em #e3e3e3;
+}
+
+.product {
+    height: 3em;
+}
+
+.product-with-desc {
+    height: 6em;
+}
+
+.category {
+    height: 6em;
+}
+
+.category-with-types {
+    height: 5em;
+}
+
+.product-with-desc .row {
+    height: 83%;
+}
+
+.product .row {
+    height: 70%;
+    min-height: 0;
+}
+
+.spacer {
+    height: 3em;
+}
+
+.row.promo-spacer {
+    height: 1.1em;
+    min-height: 0;
+    display: none;
+}
+
+.product-desc h1 {
+    margin: 0.1em 0;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 1.9em;
+    vertical-align: bottom;
+    line-height: 1em;
+    display: table-cell;
+}
+
+.product-desc p {
+    margin-top: 0.5em;
+    font-size: 0.8em;
+    color: darkred;
+    height: 1.9em;
+    line-height: 1.2em;
+}
+
+hr {
+    margin: 0.5em 0 .5em auto;
+    width: 92%;
+    opacity: .5
+}
+
+.product hr {
+    margin: 0.4em 0 0.4em auto;
+    width: 92%;
+    opacity: .5
+}
+
+.contain-flag {
+    position: relative;
+    padding-top: 0.5em;
+}
+
+.flag {
+    position: absolute;
+    padding-top: 0.3em;
+    text-transform: uppercase;
+    left: 1.4em;
+    z-index: 10;
+    background-color: darkred;
+    width: 13.1em;
+    height: 2em;
+    font-family: 'Hamburguer';
+}
+
+.flag-r {
+    position: absolute;
+    margin-top: 0.2em;
+    left: 14.55em;
+    z-index: 1;
+    background-color: transparent;
+    width: 30px;
+    border-width: 1.05em 0px;
+    border-style: solid;
+    border-left: none;
+    border-right: 20px solid transparent;
+    color: darkred;
+    padding: 0em;
+}
+
+.flag-l {
+    position: absolute;
+    margin-top: 0.2em;
+    left: 0;
+    z-index: 1;
+    background-color: transparent;
+    width: 30px;
+    border-width: 1.05em 0px;
+    border-style: solid;
+    border-right: none;
+    border-left: 20px solid transparent;
+    padding: 0em;
+    color: darkred;
+}
+
+.category-6 .item-title {
+    width: 16.1em;
+    left: 1.05em;
+}
+
+.category-6 .flag-r {
+    left: 17.2em;
+}
+
+@media (orientation: portrait) {
+    .col-md-6 {
+        width: 50%;
+        display: inline-block;
+        float: left;
+    }
+    .category-6 .item-title {
+        width: 11.85em;
+        left: 1.4em;
+    }
+    .category-6 .flag-r {
+        left: 13.3em;
+    }
+    .category-12 .item-title {
+        width: 20.7em;
+        left: 1.05em;
+    }
+    .category-12 .flag-r {
+        left: 21.8em;
+    }
+}
+
+.currency {
+    font-size: .7em;
+}
+
+.desc-true {
+    height: 70px;
+}
+
+.tableItem {
+    width: 94%;
+    height: 100%;
+    margin: 0 2%;
+}
+
+.tableItem .number {
+    font-size: 1.6em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tableItem .number span {
+    border-radius: 0.5em;
+    background: darkred;
+    display: inline-block;
+    width: 80%;
+    color: #F3FA41;
+    font-family: Impact;
+}
+
+.tableItem .title {
+    font-size: 1.3em;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.2em;
+}
+
+.tableItem .price {
+    text-align: center;
+    color: #000000;
+    font-family: Impact;
+}
+
+.tableItem .price1 {
+    font-size: 1.6em;
+    width: 25%;
+}
+
+.tableItem .price2 {
+    font-size: 1.4em;
+    width: 20%;
+}
+
+.tableItem .price3 {
+    font-size: 1.2em;
+    width: 17%;
+}
+
+.tableItem .desc {
+    vertical-align: top;
+    font-size: 0.8em;
+    color: darkred;
+    height: 1.9em;
+    line-height: 1.2em;
+}
+
+.priceHeadContainer {
+    height: 1em;
+}
+
+.priceHead {
+    width: 94%;
+    height: 100%;
+    margin: 0 2%;
+}
+
+.priceHeadItem {
+    text-align: center;
+    color: darkred;
+    text-overflow: ellipsis;
+    font-size: .8em;
+}
+
+.priceHead .rightBorder {
+    border-right: 1px solid darkred;
+}
+
+.priceHead .price1 {
+    width: 25%;
+}
+
+.priceHead .price2 {
+    width: 20%;
+}
+
+.priceHead .price3 {
+    width: 17%;
+}
+
+.fade-in {
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    -o-animation: fadeIn ease 1s;
+    -ms-animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
