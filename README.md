@@ -31,7 +31,7 @@ This template has the following features:
 
 ### Configuration
 
-This template has many configuration variables as the following table show:
+This template has many configuration variables as the following table shows:
 
 | Variable              | Type    | Required | Default   | Description                                                                                                                           |
 |-----------------------|---------|----------|-----------|---------------------------------------------------------------------------------------------------------------------------------------|
