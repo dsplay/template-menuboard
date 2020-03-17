@@ -34,7 +34,7 @@ This template has the following features:
 This template has many configuration variables as the following table show:
 
 | Variable              | Type    | Required | Default   | Description                                                                                                                           |
-|-----------------------|---------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+|-----------------------|---------|----------|-----------|---------------------------------------------------------------------------------------------------------------------------------------|
 | `logo`                | image   | Yes      |           | Brand logo                                                                                                                            |
 | `screenSize`          | string  | No       | `large`   | Determines the number of columns. Possible values: `large` or `small`.                                                                |
 | `backgroundImage`     | image   | No       |           | The background image                                                                                                                  |
