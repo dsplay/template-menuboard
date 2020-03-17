@@ -36,7 +36,7 @@ This template has many configuration variables as the following table show:
 | Variable              | Type    | Required | Default   | Description                                                                                                                           |
 |-----------------------|---------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | `logo`                | image   | Yes      |           | Brand logo                                                                                                                            |
-| `screenSize`          | string  | No       | `small`   | Determines the number of columns. Possible values: `large`|`small`.                                                                   |
+| `screenSize`          | string  | No       | `large`   | Determines the number of columns. Possible values: `large` or `small`.                                                                |
 | `backgroundImage`     | image   | No       |           | The background image                                                                                                                  |
 | `color1`              | string  | No       | `darkred` | Template Color 1                                                                                                                      |
 | `color2`              | string  | No       | `#000`    | Template Color 2                                                                                                                      |
