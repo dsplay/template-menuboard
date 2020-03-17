@@ -1,118 +1,79 @@
 ![DSPLAY - Digital Signage](https://developers.dsplay.tv/assets/images/dsplay-logo.png)
 
-# DSPLAY - React Template Boilerplate
+# DSPLAY - Menu Board
 
-This is a [React](https://reactjs.org/) boilerplate for building [HTML-based templates](https://developers.dsplay.tv/docs/html-templates) for [DSPLAY - Digital Signage](https://dsplay.tv/) platform.
+This is a HTML-based template for [DSPLAY](https://dsplay.tv).
 
-You can use this project as a skeleton for creating a new HTML Template with React. If you prefer to use another JS library, check the [other boilerplates](https://developers.dsplay.tv/docs/html-templates/boilerplates/) available.
+## Basics
 
-> This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+> This project was bootstrapped with [DSPLAY - React Template Boilerplate](https://github.com/dsplay/template-boilerplate-react).
 
-## Getting started
+## Usage
+
+This template has the following features:
+- 4 layout modes:
+  - 3 columns horizontal 
+  - 2 columns horizontal
+  - 2 columns vertical
+  - 1 column vertical
+- Auto distribute items
+- Support for special commands:
+  - column break (`/cb/`)
+  - page break (`/pb/`)
+  - empty line (`/n`)
+  - feature image (`/fi`)
+  - layout image (`/li`)
+
+![Screenshot](docs/screenshot-01.png)
+![Screenshot](docs/screenshot-02.png)
+![Screenshot](docs/screenshot-03.png)
+![Screenshot](docs/screenshot-04.png)
+
+### Configuration
+
+This template has many configuration variables as the following table show:
+
+| Variable              | Type    | Required | Default   | Description                                                                                                                           |
+|-----------------------|---------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `logo`                | image   | Yes      |           | Brand logo                                                                                                                            |
+| `screenSize`          | string  | No       | `small`   | Determines the number of columns. Possible values: `large`|`small`.                                                                   |
+| `backgroundImage`     | image   | No       |           | The background image                                                                                                                  |
+| `color1`              | string  | No       | `darkred` | Template Color 1                                                                                                                      |
+| `color2`              | string  | No       | `#000`    | Template Color 2                                                                                                                      |
+| `color3`              | string  | No       | `#FFF`    | Template Color 3                                                                                                                      |
+| `color4`              | string  | No       | `#FFCA08` | Template Color 4                                                                                                                      |
+| `loopCount`           | string  | No       | 1         | Determines how many times the content should be presented during media duration                                                       |
+| `currencyMaxCols`     | string  | No       |           | For multi-price items, determines that currency symbol should be displayed up to this number of price-columns.                        |
+| `topBarColor`         | image   | No       | `color1`  |                                                                                                                                       |
+| `backgroundColor`     | color   | No       | `color4`  |                                                                                                                                       |
+| `backgroundOpacity`   | string  | No       | `.8`      |                                                                                                                                       |
+| `bgOpacityThreshold`  | float   | No       | `75%`     |                                                                                                                                       |
+| `categoryColor`       | color   | No       | `color4`  |                                                                                                                                       |
+| `categoryBgColor`     | color   | No       | `color1`  |                                                                                                                                       |
+| `numberColor`         | color   | No       | `color4`  |                                                                                                                                       |
+| `numberBgColor`       | color   | No       | `color1`  |                                                                                                                                       |
+| `titleColor`          | color   | No       | `color2`  |                                                                                                                                       |
+| `priceColor`          | color   | No       | `color2`  |                                                                                                                                       |
+| `descColor`           | color   | No       | `color1`  |                                                                                                                                       |
+| `separatorColor`      | color   | No       | `color3`  |                                                                                                                                       |
+| `brandBoxBorderColor1`| color   | No       | `color1`  |                                                                                                                                       |
+| `brandBoxBorderColor2`| color   | No       | `color3`  |                                                                                                                                       |
+| `priceTitlesColor`    | color   | No       | `color1`  |                                                                                                                                       |
+| `footer`              | boolean | No       | `true`    | Determine if footer area must be preserved (ex: for showing additional info present on background image)                              |
+| `image1...image15`    | image   | No       |           |                                                                                                                                       |
+
+
+
+## Customizing
+
+### Getting started
 
 ```
-git clone https://github.com/dsplay/template-boilerplate-react.git my-awesome-template
+git clone https://github.com/dsplay/template-horizontal-info-bar.git my-awesome-template
 cd my-awesome-template
 rm -rf .git
 npm i
 npm start
-```
-
-
-## `dsplay-data.js`
-
-In this boilerplate project, `dsplay-data.js` is located at `public` folder.
-
-> During template development, `dsplay-data.js` will be just a mock with your test data. The DSPLAY Player App will automatically replace this file with real content at runtime.
-
-### Using `dsplay-data.js` vars in template
-
-The easiest way to access `dsplay-data.js` values in your project is by using the support library `@dsplay/template-utils` (already included in this boilerplate). 
-
-Here is a small snippet showing how to get values inside a React component:
-
-```jsx
-import React from 'react';
-import {
-    // values
-    config, // player configuration
-    media, // current media
-    template, // custom template values
-    // utility functions
-    tval, // custom template string value
-    tbval, // custom template boolean value
-    tival, // custom template int value
-    tfval, // custom template float value
-    isVertical, // boolean flag to indicate screen orientation
-
-} from '@dsplay/template-utils';
-import './App.css';
-
-const { duration } = media;
-const { orientation, locale } = config;
-
-function App() {
-    return (
-        <div className="App">
-            <h1>DSPLAY Template</h1>
-            <h2>Raw Values</h2>
-            <div>
-                <p>Config:</p>
-                <pre>{JSON.stringify(config, null, 4)}</pre>
-
-                <p>Media:</p>
-                <pre>{JSON.stringify(media, null, 4)}</pre>
-
-                <p>Template:</p>
-                <pre>{JSON.stringify(template, null, 4)}</pre>
-            </div>
-            <h2>Configuration Values Examples</h2>
-            <div>
-                <p>
-                    Orientation:
-                    <span class="val">{orientation}</span>
-                </p>
-                <p>
-                    Locale:
-                    <span class="val">{locale}</span>
-                </p>
-            </div>
-            <h2>Media Values Examples</h2>
-            <div>
-                <p>
-                    Duration:
-                    <span class="val">{duration}</span>
-                </p>
-            </div>
-            <h2>Custom Template Var Examples</h2>
-            <div>
-                <p>
-                    String:
-                    <span class="val">{tval('title', 'Default Value')}</span>
-                </p>
-                <p>
-                    Boolean:
-                    <span class="val">{tbval('expanded', true) ? 'Yes' : 'No'}</span>
-                </p>
-                <p>
-                    Int:
-                    <span class="val">{tival('page_size', 10)}</span>
-                </p>
-                <p>
-                    Double:
-                    <span class="val">{tfval('rate', .75)}</span>
-                </p>
-                <p>
-                    Vertical?:
-                    <span class="val">{isVertical ? 'Yes' : 'No'}</span>
-                </p>
-            </div>
-        </div>
-    );
-}
-
-
-export default App;
 ```
 
 ## Packing (release build)
