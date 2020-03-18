@@ -18,8 +18,8 @@ This template has the following features:
   - 1 column vertical
 - Auto distribute items
 - Support for special commands:
-  - column break (`/cb/`)
-  - page break (`/pb/`)
+  - column break (`/cb`)
+  - page break (`/pb`)
   - empty line (`/n`)
   - feature image (`/fi`)
   - layout image (`/li`)
