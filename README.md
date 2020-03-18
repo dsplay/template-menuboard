@@ -42,7 +42,7 @@ This template has many configuration variables as the following table shows:
 | `color2`              | string  | No       | `#000`    | Template Color 2                                                                                                                      |
 | `color3`              | string  | No       | `#FFF`    | Template Color 3                                                                                                                      |
 | `color4`              | string  | No       | `#FFCA08` | Template Color 4                                                                                                                      |
-| `loopCount`           | string  | No       | 1         | Determines how many times the content should be presented during media duration                                                       |
+| `loopCount`           | string  | No       | 1         | Determines how many times the content must be presented during media duration                                                       |
 | `currencyMaxCols`     | string  | No       |           | For multi-price items, determines that currency symbol should be displayed up to this number of price-columns.                        |
 | `topBarColor`         | image   | No       | `color1`  |                                                                                                                                       |
 | `backgroundColor`     | color   | No       | `color4`  |                                                                                                                                       |
