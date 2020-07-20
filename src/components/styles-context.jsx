@@ -36,7 +36,7 @@ const backgroundOpacity = tfval('backgroundOpacity', .8);
 const bgOpacityThreshold = tval('bgOpacityThreshold', '75%')
 
 const rgb = hexToRgb(backgroundColor);
-const rgbString = "rgba(" + rgb.r + ", " + rgb.g + ", " + rgb.b + ", " + backgroundOpacity + ")";
+const rgbString = rgb && "rgba(" + rgb.r + ", " + rgb.g + ", " + rgb.b + ", " + backgroundOpacity + ")";
 
 let background;
 
