@@ -174,11 +174,6 @@ div.product-category {
     text-align: center;
 }
 
-p.item-number {
-    font-size: 2.5em;
-    text-shadow: 0 0.1em 0.1em #e3e3e3;
-}
-
 .product {
     height: 3em;
 }
@@ -206,31 +201,6 @@ p.item-number {
 
 .spacer {
     height: 3em;
-}
-
-.row.promo-spacer {
-    height: 1.1em;
-    min-height: 0;
-    display: none;
-}
-
-.product-desc h1 {
-    margin: 0.1em 0;
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    height: 1.9em;
-    vertical-align: bottom;
-    line-height: 1em;
-    display: table-cell;
-}
-
-.product-desc p {
-    margin-top: 0.5em;
-    font-size: 0.8em;
-    color: darkred;
-    height: 1.9em;
-    line-height: 1.2em;
 }
 
 hr {
@@ -325,10 +295,6 @@ hr {
 
 .currency {
     font-size: .7em;
-}
-
-.desc-true {
-    height: 70px;
 }
 
 .tableItem {

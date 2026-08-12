@@ -1,12 +1,11 @@
-import { tval, tfval, config } from '@dsplay/template-utils';
-import { hexToRgb } from '../ultis/utils';
-import DEFAULT_BG_IMAGE from '../assets/images/menu-back-medium.jpg';
 import { createContext } from 'react';
+import { tval, tfval, config } from '@dsplay/template-utils';
+import { hexToRgb } from '../../utils/utils';
+import DEFAULT_BG_IMAGE from '../../assets/images/menu-back-medium.jpg';
 
 const webkit = config.osVersion < 19;
 
 const bgImage = tval('backgroundImage', DEFAULT_BG_IMAGE);
-
 
 // styles
 const color1 = tval('color1', 'darkred');
@@ -30,20 +29,20 @@ const brandBoxBorderColor2 = tval('brandBoxBorderColor2', color3);
 const backgroundColor = tval('backgroundColor', color4);
 const categoryColor = tval('categoryColor', color4);
 const numberColor = tval('numberColor', color4);
-let fontSize = '100%';
+const fontSize = '100%';
 
-const backgroundOpacity = tfval('backgroundOpacity', .8);
-const bgOpacityThreshold = tval('bgOpacityThreshold', '75%')
+const backgroundOpacity = tfval('backgroundOpacity', 0.8);
+const bgOpacityThreshold = tval('bgOpacityThreshold', '75%');
 
 const rgb = hexToRgb(backgroundColor);
-const rgbString = rgb && "rgba(" + rgb.r + ", " + rgb.g + ", " + rgb.b + ", " + backgroundOpacity + ")";
+const rgbString = rgb && `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${backgroundOpacity})`;
 
 let background;
 
 if (webkit) {
-    background = `-webkit-linear-gradient( top, ${rgbString} ${bgOpacityThreshold}, transparent 120%)`;
+  background = `-webkit-linear-gradient( top, ${rgbString} ${bgOpacityThreshold}, transparent 120%)`;
 } else {
-    background = `linear-gradient(to bottom, ${rgbString} ${bgOpacityThreshold}, transparent 100%)`;
+  background = `linear-gradient(to bottom, ${rgbString} ${bgOpacityThreshold}, transparent 100%)`;
 }
 
 const brandBoxBorder = `1px dashed ${brandBoxBorderColor1}`;
@@ -51,24 +50,24 @@ const brandBoxBoxShadow = `0 0 0 0.15em ${brandBoxBorderColor2}, 0 0 0 0.3em ${b
 const adBoxBoxShadow = `0 0 0.10em 0.2em ${brandBoxBorderColor2}`;
 
 export const styles = {
-    brandBoxBorder,
-    brandBoxBoxShadow,
-    adBoxBoxShadow,
-    topBarColor,
-    fontSize,
-    categoryBgColor,
-    numberBgColor,
-    descColor,
-    brandBoxBorderColor1,
-    brandBoxBorderColor2,
-    priceTitlesColor,
-    titleColor,
-    priceColor,
-    separatorColor,
-    background,
-    bgImage,
-    categoryColor,
-    numberColor,
+  brandBoxBorder,
+  brandBoxBoxShadow,
+  adBoxBoxShadow,
+  topBarColor,
+  fontSize,
+  categoryBgColor,
+  numberBgColor,
+  descColor,
+  brandBoxBorderColor1,
+  brandBoxBorderColor2,
+  priceTitlesColor,
+  titleColor,
+  priceColor,
+  separatorColor,
+  background,
+  bgImage,
+  categoryColor,
+  numberColor,
 };
 
 export const StylesContext = createContext(styles);

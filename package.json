@@ -1,28 +1,54 @@
 {
-    "name": "@dsplay/template-menuboard",
-    "version": "1.0.0",
-    "private": true,
-    "dependencies": {
-        "@dsplay/template-utils": "^1.1.8",
-        "node-sass": "^4.14.1",
-        "react": "^16.13.1",
-        "react-app-polyfill": "^1.0.6",
-        "react-dom": "^16.13.1",
-        "react-scripts": "^3.4.1"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject",
-        "prezip": "npm run build",
-        "zip": "rm -rf build/test-assets && ./build.sh"
-    },
-    "homepage": "./",
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+  "name": "dsplay-template-menuboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "dependencies": {
+    "@dsplay/template-utils": "^1.4.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "scripts": {
+    "start": "vite",
+    "prebuild": "npm run linter",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "linter": "eslint src",
+    "linter:fix": "eslint src --fix",
+    "prezip": "npm run build",
+    "zip": "rm -rf build/test-assets && ./build.sh"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all",
+    "Chrome >= 45",
+    "Android >= 4.4"
+  ],
+  "devDependencies": {
+    "@dsplay/template-manifest": "^1.0.2",
+    "@eslint/js": "^9.39.5",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-legacy": "^8.2.1",
+    "@vitejs/plugin-react": "^6.0.4",
+    "eslint": "^9.39.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-unicorn": "^65.0.1",
+    "globals": "^17.7.0",
+    "jsdom": "^30.0.1",
+    "sass": "^1.101.3",
+    "terser": "^5.49.0",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
+  }
 }
