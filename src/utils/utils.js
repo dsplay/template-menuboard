@@ -1,13 +1,12 @@
-import { tbval, template } from '@dsplay/template-utils';
-
-const DEBUG = tbval('debug');
 const DEFAULT_IMAGE_SIZE = 6;
 
-function log(...args) {
-  if (DEBUG) {
-    // eslint-disable-next-line no-console
-    console.log(...args);
-  }
+function createLog(debug) {
+  return (...args) => {
+    if (debug) {
+      // eslint-disable-next-line no-console
+      console.log(...args);
+    }
+  };
 }
 
 export function getMaxItemsForColumn(column, options) {
@@ -70,7 +69,7 @@ export function createPage(cols) {
   return page;
 }
 
-export function parseFeaturedImage(text) {
+export function parseFeaturedImage(text, template, log) {
   if (!text) return null;
 
   try {
@@ -117,7 +116,7 @@ export function hexToRgb(hex) {
 
 const categoryUsage = {};
 
-function getCategoryUsageCount(cod) {
+function getCategoryUsageCount(cod, log) {
   if (categoryUsage[cod]) {
     categoryUsage[cod] += 1;
   } else {
@@ -149,7 +148,10 @@ export function createPages(data, options) {
   const {
     showSectionPartials,
     cols,
+    debug,
+    template,
   } = options;
+  const log = createLog(debug);
 
   const pages = [];
 
@@ -217,7 +219,7 @@ export function createPages(data, options) {
       const isPageBreak = item.num === '/pb';
       const isFeaturedImage = featuredImage(item);
       const isSpacer = !isColumnBreak && !isPageBreak && !isFeaturedImage && (!item.title || item.num === '/n');
-      const fi = isFeaturedImage ? parseFeaturedImage(item.num) : null;
+      const fi = isFeaturedImage ? parseFeaturedImage(item.num, template, log) : null;
 
       let itemSize = 0;
       let resetColumnCount = isColumnBreak || isPageBreak;
@@ -280,7 +282,7 @@ export function createPages(data, options) {
 
           if (repeatCategory && showSectionPartials && !currentCategory.usage) {
             log('changing current category: ', currentCategory);
-            currentCategory.usage = getCategoryUsageCount(category.cod);
+            currentCategory.usage = getCategoryUsageCount(category.cod, log);
             log('changing current category: ', currentCategory);
             log('category usage:', categoryUsage);
           }
@@ -294,7 +296,7 @@ export function createPages(data, options) {
               type: 'category',
               cod: category.cod,
               title: category.title,
-              usage: showSectionPartials ? getCategoryUsageCount(category.cod) : null,
+              usage: showSectionPartials ? getCategoryUsageCount(category.cod, log) : null,
               typed: priceCount > 1,
             };
             page[colIdx].push(currentCategory);

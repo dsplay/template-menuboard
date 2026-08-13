@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { template } from '@dsplay/template-utils';
+import { useTemplate } from '@dsplay/react-template-utils';
 import { StylesContext } from '../../contexts/styles-context';
 
 function Item({
@@ -9,6 +9,7 @@ function Item({
   last,
   num,
 }) {
+  const template = useTemplate();
   const prices = price;
   const priceAuxClassName = `price${Math.min(prices.length, 4)}`;
   const showCurrency = template.currencySymbol && (template.currencyMaxCols ? (template.currencyMaxCols >= prices.length) : true);

@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'react';
-import { template } from '@dsplay/template-utils';
+import { useTemplate } from '@dsplay/react-template-utils';
 import Column from '../column';
 import { StylesContext } from '../../contexts/styles-context';
 
@@ -16,7 +16,7 @@ function MenuBoard({
 
   const page = useMemo(() => pages[index], [pages, index]);
 
-  const { logo } = template;
+  const { logo } = useTemplate();
   const colCount = cols;
 
   const bgUrl = featured ? `url('${featured}')` : 'none';
