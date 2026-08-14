@@ -21,7 +21,7 @@ src/
   hooks/use-interval.js        <-- setInterval hook driving page auto-rotation
   contexts/styles-context/     <-- reads all the color/style template variables once, provides them via context
   components/
-    app/                        <-- top-level component, imports bootstrap + menu.css
+    app/                        <-- top-level component, imports bootstrap.min.css (vendored) + menu.sass
     container/                  <-- reads media/template vars, builds pages, rotates through them
     menu-board/                 <-- lays out one page's up-to-3 columns + the brand/ad box
     column/                     <-- renders one column's items (category/spacer/pricesHead/featuredImage/item)
@@ -37,6 +37,7 @@ build.sh                    <-- zips the Vite build output into template.zip
 - **Always import a component by its folder, never by reaching into `index`** — `import Column from '../column'`, never `.../column/index`.
 - Non-component modules (context, hooks, utils) live outside `components/` in their own top-level folder, following the same folder+`index.jsx` convention only when they export a component (e.g. `contexts/styles-context/index.jsx` provides `StylesContext` and its `useStyles()` hook) — plain `.js` files elsewhere don't need it.
 - Enforced automatically by ESLint's `unicorn/filename-case` rule for the naming half of this; the folder+`index.jsx`+import-by-folder structure is not machine-checked, just convention.
+- `src/assets/styles/menu.sass` was converted from `menu.css` (mechanical CSS→indented-syntax rewrite, verified with `sass` to compile to identical CSS) to comply with the sass-only rule above — it's our own hand-authored layout/font-face stylesheet, unlike the vendored `bootstrap/css/bootstrap.min.css` sitting right next to it, which stays `.css`.
 
 ## Package identity
 
