@@ -118,6 +118,53 @@ body
 ```
 Verified via direct comparison against the original Bootstrap 3 build (git worktree at the pre-upgrade commit) at the exact window size (1854×927) where the bug was reported: `body`/`.container` computed font-size, `.row` width, and item title font-size are now byte-identical between old and new (14px / 1170px / 18.2px in both), and the featured-image `.ad-box` no longer overlaps the row above it. If `menu.sass`'s Bootstrap-class overrides are ever changed, re-verify at a window width ≥1400px specifically — that's where Bootstrap 5's extra `xxl` breakpoint diverges from Bootstrap 3's behavior, and where this regression was invisible at smaller test resolutions.
 
+### Fixed: `.brand-box` (and every other unclassed `.row` child) stretched to 100% width and overflowed into the next column
+
+After the two fixes above, the logo box (`.brand-box`, a plain unclassed child of `<div className="row brand-container">`) still rendered too wide and shifted right, overlapping the second column. Root-caused via side-by-side `getComputedStyle`/`getBoundingClientRect` comparison (not screenshots — see the note in the previous section about why) between a git worktree at the pre-upgrade commit and the current tree, both built with `npm run build` (not `npm run zip`, which blanks `public/dsplay-data.js` to a placeholder and crashes `npm run preview` with no mock data) and served via `npm run preview` at the exact reported window size:
+
+- Old (Bootstrap 3): `.brand-box` rect `l=398 r=871 w=473`, `.brand-container` `display: block`.
+- New (Bootstrap 5, pre-fix): `.brand-box` rect `l=398 r=983 w=585` — 112px wider (exactly 2× the box's own `4em`/56px side margins), overflowing 56px into the next column.
+
+Two independent Bootstrap 3→5 grid changes combine to cause this:
+
+1. **`.row` became `display: flex`** (Bootstrap 3's was plain `display: block`, float-cleared columns). This activates `.brand-box`'s own pre-existing `flex-grow: 1` — under Bootstrap 3 this property was always inert (it only takes effect inside a real flex container), so it was safe to leave in `.brand-box`'s CSS for a decade.
+2. **Bootstrap 5 added a `.row > *` rule** (absent from Bootstrap 3) that force-sets `width: 100%` (plus grid-gutter padding and `margin-top`) on *every* direct child of `.row`, not just `.col-*` children. Verified this is sufficient on its own: forcing `.brand-box`'s `flex-grow` to `0` and its `display` to `block` directly in devtools did *not* change its rendered width — only removing `.row > *`'s `width: 100%` did.
+
+Since this template's whole layout (`menu-board`, `section-title`, `featured-image`, `item`, `prices-head` — every one of them uses `.row`/`.col-md-4`/`.col-md-6`/`.col-md-12`) was built against Bootstrap 3's float engine, the fix restores that engine wholesale in `menu.sass` rather than patching `.brand-box` in isolation (extracted byte-for-byte from `git show <pre-upgrade-commit>:src/assets/styles/bootstrap/css/bootstrap.min.css`):
+```sass
+.row
+  display: block
+  margin-right: -15px
+  margin-left: -15px
+
+.row > *
+  width: auto
+  max-width: none
+  padding-right: 0
+  padding-left: 0
+  margin-top: 0
+
+@media (min-width: 992px)
+  .col-md-4, .col-md-6, .col-md-12
+    position: relative
+    min-height: 1px
+    padding-right: 15px
+    padding-left: 15px
+  .col-md-4, .col-md-6
+    float: left
+  .col-md-4
+    width: 33.33333333%
+  .col-md-6
+    width: 50%
+  .col-md-12
+    width: 100%
+```
+Also restored `.container`'s `padding-right`/`padding-left: 15px` (Bootstrap 3's fixed value at every breakpoint) — Bootstrap 5 derives this from a `--bs-gutter-x` custom property instead, which no longer resolves to the same pixel value once `body`'s font-size is restored to `14px` above, throwing every child's left offset off by a few px.
+
+Verified via the same exact-measurement approach: `.brand-box` rect is now `l=398 r=871 w=473` — byte-identical to the Bootstrap 3 baseline — and both `.col-md-6` columns split cleanly at `342/927/1512` with zero overlap. Re-checked visually too, including the "Bebidas" category specifically (the one from the earlier `.container`-breakpoint bug) to confirm the featured-image column still doesn't overlap.
+
+If `.row`/`.col-md-*` CSS is ever touched again, re-verify with exact DOM measurements (not screenshots — the per-category crossfade animation makes screenshot timing unreliable) on every `.row`-based component listed above, not just `.brand-box`.
+
 ### Known pending bump: ESLint 9 -> 10
 
 `eslint`/`@eslint/js` are pinned to `^9.39.5` (latest is `10.x`). Bumping them currently fails on peer dependency conflicts: `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, and `eslint-plugin-react` haven't declared ESLint 10 support yet as of 2026-08-12 — they're still the actively-maintained canonical packages, not abandoned or superseded, just lagging behind the major. `eslint-plugin-react-hooks` already supports it. `eslint-plugin-unicorn` is pinned to `65.0.1` for the same reason (`66.0.0+` requires ESLint `>=10.4`). Don't force this with `--legacy-peer-deps` — re-check peer ranges periodically and bump all of them together once the laggards catch up.

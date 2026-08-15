@@ -54,6 +54,12 @@ body
   padding-top: 10px
   padding-bottom: 1em
   height: 90%
+  // Bootstrap 3's .container had a fixed 15px left/right padding at every
+  // breakpoint. Bootstrap 5 derives it from --bs-gutter-x (1.5rem / 2),
+  // which resolves differently now that body's font-size is restored to
+  // 14px above, throwing every child's left offset off by a few px.
+  padding-right: 15px
+  padding-left: 15px
 
 // Restore Bootstrap 3's original .container max-width breakpoints. Bootstrap
 // 5's breakpoint table differs (notably a new >=1400px "xxl" tier capping at
@@ -75,8 +81,51 @@ body
   .container
     max-width: 1170px
 
-.container .col-md-4
-  float: left
+// Restore Bootstrap 3's original float-based grid engine for every .row/
+// .col-md-* class this app actually uses (menu-board, section-title,
+// featured-image, item, prices-head). This template's entire layout (column
+// widths, item-count math in utils/utils.js) was built against Bootstrap 3's
+// float engine, not Bootstrap 5's flexbox one, so the safest fix is
+// restoring the original engine wholesale rather than patching each symptom
+// individually.
+.row
+  display: block
+  margin-right: -15px
+  margin-left: -15px
+
+// Bootstrap 5 also added a ".row > *" rule (absent from Bootstrap 3) that
+// force-sets width:100%/padding/margin-top on EVERY direct child of .row,
+// not just .col-* children - this alone is enough to explain .brand-box
+// (an unclassed direct child of .row.brand-container) stretching to the
+// row's full width and overflowing into the next column, regardless of
+// .row's own display or .brand-box's own (previously inert) flex-grow: 1.
+// Neutralize it so unclassed row children fall back to plain block sizing,
+// exactly as under Bootstrap 3.
+.row > *
+  width: auto
+  max-width: none
+  padding-right: 0
+  padding-left: 0
+  margin-top: 0
+
+@media (min-width: 992px)
+  .col-md-4, .col-md-6, .col-md-12
+    position: relative
+    min-height: 1px
+    padding-right: 15px
+    padding-left: 15px
+
+  .col-md-4, .col-md-6
+    float: left
+
+  .col-md-4
+    width: 33.33333333%
+
+  .col-md-6
+    width: 50%
+
+  .col-md-12
+    width: 100%
 
 .container .jumbotron,
 .container-fluid .jumbotron
