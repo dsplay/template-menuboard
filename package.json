@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@dsplay/react-template-utils": "^5.1.2",
-    "bootstrap": "^5.3.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

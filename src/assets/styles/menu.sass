@@ -10,17 +10,39 @@
   font-weight: normal
   font-style: normal
 
+// This template used to rely on Bootstrap for base browser resets, even
+// though it only ever used a handful of Bootstrap's actual components (see
+// AGENTS.md). Kept here directly instead, scoped to only the elements this
+// app actually uses (div/span/table/hr - no headings, lists, images, links,
+// or form controls anywhere in src/**/*.jsx), so there's no dependency left
+// to silently change defaults out from under this em-based, exact-pixel
+// layout on a future major-version bump.
+*, *::before, *::after
+  box-sizing: border-box
+
+hr
+  box-sizing: content-box
+  border: 0
+  border-top: 1px solid #eee
+
+table
+  border-spacing: 0
+  border-collapse: collapse
+  background-color: transparent
+
 html
   height: 100%
   background-color: #000
 
 body
   height: 100%
-  // Bootstrap 3 set body's base font-size to 14px; Bootstrap 4+ (including 5)
-  // changed this default to 1rem (16px). Every em-based size in this
-  // stylesheet cascades from here, so leaving Bootstrap 5's default in place
-  // makes the entire template ~14% bigger than it was designed for. Restore
-  // Bootstrap 3's original base size explicitly.
+  margin: 0
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  line-height: 1.42857143
+  color: #333
+  // This template's every em-based size (`.ad-box-N` heights, margins, font
+  // sizes throughout this file) cascades from body's font-size, so it's
+  // pinned to an exact value rather than left at the browser default (16px).
   font-size: 14px
 
 .pseudo-body
@@ -54,21 +76,14 @@ body
   padding-top: 10px
   padding-bottom: 1em
   height: 90%
-  // Bootstrap 3's .container had a fixed 15px left/right padding at every
-  // breakpoint. Bootstrap 5 derives it from --bs-gutter-x (1.5rem / 2),
-  // which resolves differently now that body's font-size is restored to
-  // 14px above, throwing every child's left offset off by a few px.
+  margin-right: auto
+  margin-left: auto
   padding-right: 15px
   padding-left: 15px
 
-// Restore Bootstrap 3's original .container max-width breakpoints. Bootstrap
-// 5's breakpoint table differs (notably a new >=1400px "xxl" tier capping at
-// 1320px, wider than Bootstrap 3 ever went - it topped out at 1170px for any
-// screen >=1200px). This template's fixed "items per column" layout math
-// (see utils/utils.js's getMaxItemsForColumn) was tuned against Bootstrap 3's
-// narrower container, so leaving Bootstrap 5's wider defaults in place makes
-// every em-based size (fonts, images, margins) scale up, and overflows the
-// pages built for the old, narrower assumption.
+// This template's fixed "items per column" layout math (see utils/utils.js's
+// getMaxItemsForColumn) is tuned against these exact container widths - if
+// they ever change, that math needs re-tuning too.
 @media (min-width: 768px)
   .container
     max-width: 750px
@@ -81,26 +96,24 @@ body
   .container
     max-width: 1170px
 
-// Restore Bootstrap 3's original float-based grid engine for every .row/
-// .col-md-* class this app actually uses (menu-board, section-title,
-// featured-image, item, prices-head). This template's entire layout (column
-// widths, item-count math in utils/utils.js) was built against Bootstrap 3's
-// float engine, not Bootstrap 5's flexbox one, so the safest fix is
-// restoring the original engine wholesale rather than patching each symptom
-// individually.
+// Hand-rolled float-based grid for every .row/.col-md-* class this app
+// actually uses (menu-board, section-title, featured-image, item,
+// prices-head). Previously came from Bootstrap; kept here directly now
+// (see AGENTS.md) since this was the only part of Bootstrap's grid engine
+// this app ever used.
 .row
   display: block
   margin-right: -15px
   margin-left: -15px
+  &::before, &::after
+    content: " "
+    display: table
+  &::after
+    clear: both
 
-// Bootstrap 5 also added a ".row > *" rule (absent from Bootstrap 3) that
-// force-sets width:100%/padding/margin-top on EVERY direct child of .row,
-// not just .col-* children - this alone is enough to explain .brand-box
-// (an unclassed direct child of .row.brand-container) stretching to the
-// row's full width and overflowing into the next column, regardless of
-// .row's own display or .brand-box's own (previously inert) flex-grow: 1.
-// Neutralize it so unclassed row children fall back to plain block sizing,
-// exactly as under Bootstrap 3.
+// Unclassed direct children of .row (e.g. .brand-box) get plain block
+// sizing, not a forced width - only actual .col-* children get an explicit
+// width, below.
 .row > *
   width: auto
   max-width: none
@@ -127,8 +140,9 @@ body
   .col-md-12
     width: 100%
 
-.container .jumbotron,
-.container-fluid .jumbotron
+// ".jumbotron" is now just a plain app-owned class (see AGENTS.md) - the
+// name is a holdover from when it was an actual Bootstrap component.
+.jumbotron
   padding-right: 60px
   padding-left: 60px
   padding-top: 48px
@@ -145,9 +159,6 @@ body
   flex-grow: 1
   background-color: #ffffff
   border: 1px dashed
-  // Bootstrap 3's now-removed .jumbotron component (see AGENTS.md) provided
-  // this rounded-corner styling for free; Bootstrap 5 dropped .jumbotron
-  // entirely, so it needs to be explicit here now.
   border-radius: 6px
   align-content: stretch
   align-items: center

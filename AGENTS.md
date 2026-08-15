@@ -82,6 +82,8 @@ Regular npm dependencies, not vendored files — `npm outdated` / `npm update` f
 
 ### Fixed: Bootstrap was a hand-vendored, unversioned Bootstrap 3.3.7 copy from 2016
 
+> Bootstrap was later removed from this project entirely — see the last subsection below. The `bootstrap` npm package mentioned here no longer exists in `package.json`; this subsection is kept for history since the swap below (v3.3.7 → npm `^5.3.8`) is what surfaced the next three fixes.
+
 `src/assets/styles/bootstrap/` used to hold a manually-downloaded `bootstrap.min.css` (v3.3.7) plus Glyphicons webfont files, imported directly by path from `app/index.jsx`. Two problems: it was frozen at a 2016 release with no way to update it short of re-downloading files by hand, and its minified CSS referenced a `bootstrap.min.css.map` that was never actually included, so Vite's dev server logged a `Failed to load source map` / `ENOENT` error on every request (harmless — it only broke "jump to original source" in devtools for that one vendored file, not the app itself).
 
 Replaced with the real `bootstrap` npm package (`^5.3.8`) — `app/index.jsx` now does `import 'bootstrap/dist/css/bootstrap.min.css';`, and the vendored folder plus its Glyphicons fonts were deleted (Glyphicons were dead weight regardless: grepping `src/**/*.jsx` for `glyphicon` turns up zero usages, and Bootstrap dropped Glyphicons entirely starting in v4). The npm package ships its own correct source map, so the console error is gone.
@@ -164,6 +166,41 @@ Also restored `.container`'s `padding-right`/`padding-left: 15px` (Bootstrap 3's
 Verified via the same exact-measurement approach: `.brand-box` rect is now `l=398 r=871 w=473` — byte-identical to the Bootstrap 3 baseline — and both `.col-md-6` columns split cleanly at `342/927/1512` with zero overlap. Re-checked visually too, including the "Bebidas" category specifically (the one from the earlier `.container`-breakpoint bug) to confirm the featured-image column still doesn't overlap.
 
 If `.row`/`.col-md-*` CSS is ever touched again, re-verify with exact DOM measurements (not screenshots — the per-category crossfade animation makes screenshot timing unreliable) on every `.row`-based component listed above, not just `.brand-box`.
+
+### Fixed: Bootstrap removed entirely — this template never used enough of it to justify the dependency
+
+After the three fixes above, an audit of actual usage (`grep -rohE "className=\"[^"]*\"" src --include="*.jsx"`, plus a scan for every HTML tag used) found this template only ever touched five Bootstrap primitives — `.container`, `.row`, `.col-md-4`/`.col-md-6`/`.col-md-12`, and one `.jumbotron` — out of Bootstrap's entire ~228KB stylesheet. No buttons, forms, navbar, cards, or utility classes; every other visible class (`.tableItem`, `.priceHead`, `.ad-box-N`, `.flag`, etc.) was already custom CSS in `menu.sass`. Since three consecutive major-version-bump regressions had already been traced back to Bootstrap defaults changing under this template's feet, and all five primitives it actually used were already fully re-implemented in `menu.sass` by the fixes above, the dependency itself was removed rather than kept as 228KB of unused CSS with more upgrade risk baked in.
+
+Removed `bootstrap` from `package.json` (`npm uninstall bootstrap`) and its `import 'bootstrap/dist/css/bootstrap.min.css';` from `app/index.jsx`. Bootstrap wasn't just supplying the grid — it was also silently supplying baseline browser resets this template depended on without ever declaring them itself. Removing it clean required auditing which reset rules were actually load-bearing (checked against every HTML tag this app actually renders: `div`, `span`, `table`, `tbody`, `tr`, `td`, `hr` — no headings, lists, images, links, or form controls anywhere in `src/**/*.jsx`) and adding them explicitly to `menu.sass`:
+```sass
+*, *::before, *::after
+  box-sizing: border-box
+
+hr
+  box-sizing: content-box
+  border: 0
+  border-top: 1px solid #eee
+
+table
+  border-spacing: 0
+  border-collapse: collapse
+  background-color: transparent
+
+body
+  margin: 0
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  line-height: 1.42857143
+  color: #333
+```
+Two more Bootstrap defaults turned out to be load-bearing and were missing from the grid restoration above (only surfaced once Bootstrap's CSS was gone entirely and couldn't paper over them anymore — caught via the same worktree DOM-measurement comparison, not by inspection):
+1. **`.container` centering**: Bootstrap's own base `.container` rule always included `margin-right: auto; margin-left: auto`. `menu.sass` never declared this itself (it only overrode padding/max-width), so once Bootstrap's rule was gone the container collapsed to the left edge (`l=0` instead of `l=342` at the tested window size). Added `margin-right: auto; margin-left: auto` to `.container` in `menu.sass`.
+2. **`.row` clearfix**: Bootstrap's `.row` includes a clearfix (`&::before, &::after { content: " "; display: table } &::after { clear: both }`) to contain its floated `.col-md-*` children — without it, a `.row` with only floated children collapses to zero height. Added the same clearfix to `.row` in `menu.sass`.
+
+`.jumbotron` is kept as a plain class name in `menu.sass` and in `menu-board/index.jsx`'s `className="jumbotron brand-box"` — it's no longer tied to an actual Bootstrap component, just a legacy name for an app-owned rule now, left as-is rather than renamed to avoid churn.
+
+Verified via the same worktree-based exact-DOM-measurement approach as the fixes above: every measured selector (`.container`, `.row`, `.col-md-6`, `.col-md-12`, `.brand-box`, `.tableItem`, `.priceHead`, `.category`, `.currency`, `body`'s computed `margin`/`font-family`/`line-height`/`color`/`font-size`) is now byte-identical between the pre-Bootstrap-5-upgrade baseline and this Bootstrap-free build, at the same window size used throughout this saga. Also diffed the actual compiled CSS rules (not rendered instances, to sidestep the per-category rotation-timing pitfall noted above) for every component's classes and confirmed they're textually identical except for the intentionally-added `.brand-box` `border-radius: 6px` from the earlier fix. Total CSS bundle size dropped from ~241KB to ~5KB.
+
+If any new feature ever needs an actual Bootstrap component (modals, forms, navbar, etc.), don't silently re-add the npm package — build it as custom CSS/JS matching this template's own conventions, the same way everything else here already is.
 
 ### Known pending bump: ESLint 9 -> 10
 
