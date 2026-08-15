@@ -21,7 +21,7 @@ src/
   hooks/use-interval.js        <-- setInterval hook driving page auto-rotation
   contexts/styles-context/     <-- reads all the color/style template variables once, provides them via context
   components/
-    app/                        <-- top-level component, imports bootstrap.min.css (vendored) + menu.sass
+    app/                        <-- top-level component, imports bootstrap (real npm package) + menu.sass
     container/                  <-- reads media/template vars, builds pages, rotates through them
     menu-board/                 <-- lays out one page's up-to-3 columns + the brand/ad box
     column/                     <-- renders one column's items (category/spacer/pricesHead/featuredImage/item)
@@ -31,13 +31,13 @@ build.sh                    <-- zips the Vite build output into template.zip
 
 ## File and folder naming
 
-- **kebab-case everywhere** in `src/` (and anywhere else in this repo we author ourselves) — folders, JS/JSX files, Sass files, test files. Doesn't apply to files whose name is a fixed convention from tooling (`package.json`, `vite.config.js`, etc.) or to vendored/third-party assets we don't control the naming of (`src/assets/styles/bootstrap/`, `src/assets/fonts/`).
+- **kebab-case everywhere** in `src/` (and anywhere else in this repo we author ourselves) — folders, JS/JSX files, Sass files, test files. Doesn't apply to files whose name is a fixed convention from tooling (`package.json`, `vite.config.js`, etc.) or to vendored/third-party assets we don't control the naming of (`src/assets/fonts/`).
 - **Author styles as `.sass` (indented syntax), never `.css`** — this applies to our own hand-authored stylesheets specifically; it does not apply to vendored or tool-generated CSS we don't hand-edit (a self-hosted Google Fonts `@font-face` file, a Flaticon/IcoMoon icon-font export, a vendored library like Bootstrap) — those stay `.css` since they'd be regenerated/replaced wholesale, not edited by hand. `.sass`'s indented syntax has no braces or semicolons — converting a `.css` file means rewriting it to the indented syntax, not just renaming it.
 - **Every component gets its own folder with an `index.jsx`.** For a simple component, `index.jsx` *is* the component.
 - **Always import a component by its folder, never by reaching into `index`** — `import Column from '../column'`, never `.../column/index`.
 - Non-component modules (context, hooks, utils) live outside `components/` in their own top-level folder, following the same folder+`index.jsx` convention only when they export a component (e.g. `contexts/styles-context/index.jsx` provides `StylesContext` and its `useStyles()` hook) — plain `.js` files elsewhere don't need it.
 - Enforced automatically by ESLint's `unicorn/filename-case` rule for the naming half of this; the folder+`index.jsx`+import-by-folder structure is not machine-checked, just convention.
-- `src/assets/styles/menu.sass` was converted from `menu.css` (mechanical CSS→indented-syntax rewrite, verified with `sass` to compile to identical CSS) to comply with the sass-only rule above — it's our own hand-authored layout/font-face stylesheet, unlike the vendored `bootstrap/css/bootstrap.min.css` sitting right next to it, which stays `.css`.
+- `src/assets/styles/menu.sass` was converted from `menu.css` (mechanical CSS→indented-syntax rewrite, verified with `sass` to compile to identical CSS) to comply with the sass-only rule above — it's our own hand-authored layout/font-face stylesheet. Bootstrap (see Dependency management below) is a real npm package now, not a vendored file, so it isn't subject to this rule at all.
 
 ## Package identity
 
@@ -79,6 +79,14 @@ The live "casa da esfiha" block's `logo`/`backgroundImage`/`image1`..`image9` al
 ## Dependency management
 
 Regular npm dependencies, not vendored files — `npm outdated` / `npm update` for in-range bumps. For an out-of-range (typically major) bump, apply it deliberately and verify `npm start`, `npm run build`, and `npm test` still work before committing.
+
+### Fixed: Bootstrap was a hand-vendored, unversioned Bootstrap 3.3.7 copy from 2016
+
+`src/assets/styles/bootstrap/` used to hold a manually-downloaded `bootstrap.min.css` (v3.3.7) plus Glyphicons webfont files, imported directly by path from `app/index.jsx`. Two problems: it was frozen at a 2016 release with no way to update it short of re-downloading files by hand, and its minified CSS referenced a `bootstrap.min.css.map` that was never actually included, so Vite's dev server logged a `Failed to load source map` / `ENOENT` error on every request (harmless — it only broke "jump to original source" in devtools for that one vendored file, not the app itself).
+
+Replaced with the real `bootstrap` npm package (`^5.3.8`) — `app/index.jsx` now does `import 'bootstrap/dist/css/bootstrap.min.css';`, and the vendored folder plus its Glyphicons fonts were deleted (Glyphicons were dead weight regardless: grepping `src/**/*.jsx` for `glyphicon` turns up zero usages, and Bootstrap dropped Glyphicons entirely starting in v4). The npm package ships its own correct source map, so the console error is gone.
+
+This is a major-version jump (v3 → v5) for a template that genuinely uses Bootstrap's grid (`.container`/`.row`/`.col-md-*`) and `.jumbotron` (`menu-board/index.jsx`) — v4 switched the grid from float-based to flexbox, and v5 removed the `.jumbotron` component's CSS entirely. Verified with a live before/after browser comparison (same "Casa da Esfiha" mock data) that the rendered layout is pixel-for-pixel the same — this template's own `menu.sass` overrides most of the actual visual styling (`.container`, `.jumbotron` padding, etc.), so the grid-engine and jumbotron-removal changes didn't surface here. Re-verify visually if `menu.sass`'s Bootstrap-class overrides are ever changed, since that's the part actually load-bearing for this template's look.
 
 ### Known pending bump: ESLint 9 -> 10
 
