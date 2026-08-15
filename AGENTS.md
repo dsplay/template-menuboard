@@ -86,7 +86,33 @@ Regular npm dependencies, not vendored files — `npm outdated` / `npm update` f
 
 Replaced with the real `bootstrap` npm package (`^5.3.8`) — `app/index.jsx` now does `import 'bootstrap/dist/css/bootstrap.min.css';`, and the vendored folder plus its Glyphicons fonts were deleted (Glyphicons were dead weight regardless: grepping `src/**/*.jsx` for `glyphicon` turns up zero usages, and Bootstrap dropped Glyphicons entirely starting in v4). The npm package ships its own correct source map, so the console error is gone.
 
-This is a major-version jump (v3 → v5) for a template that genuinely uses Bootstrap's grid (`.container`/`.row`/`.col-md-*`) and `.jumbotron` (`menu-board/index.jsx`) — v4 switched the grid from float-based to flexbox, and v5 removed the `.jumbotron` component's CSS entirely. Verified with a live before/after browser comparison (same "Casa da Esfiha" mock data) that the rendered layout is pixel-for-pixel the same — this template's own `menu.sass` overrides most of the actual visual styling (`.container`, `.jumbotron` padding, etc.), so the grid-engine and jumbotron-removal changes didn't surface here. Re-verify visually if `menu.sass`'s Bootstrap-class overrides are ever changed, since that's the part actually load-bearing for this template's look.
+This is a major-version jump (v3 → v5) for a template that genuinely uses Bootstrap's grid (`.container`/`.row`/`.col-md-*`) and `.jumbotron` (`menu-board/index.jsx`) — v4 switched the grid from float-based to flexbox, and v5 removed the `.jumbotron` component's CSS entirely. A live before/after browser comparison (same "Casa da Esfiha" mock data) at a ~1568px window confirmed the rendered layout was pixel-for-pixel the same there — but see the next section for two more Bootstrap v3→v5 default changes that *do* surface at other window sizes, found only after re-testing at a wider resolution.
+
+### Fixed: Bootstrap 5's wider `.container` breakpoints and 16px base font-size made every `em`-based size in this template bigger, causing real overlap at wide window sizes
+
+The "pixel-for-pixel identical" check above only holds below Bootstrap 5's `lg`/`xl`/`xxl` breakpoints. Two of Bootstrap 3→5's *deliberate* default changes matter a lot here because this template's `menu.sass` is entirely `em`-based (`.ad-box-N` heights, margins, font sizes — everything cascades from `body`'s font-size and `.container`'s width):
+
+1. **`body`'s base font-size**: Bootstrap 3 set it to a fixed `14px`; Bootstrap 4+ (including 5) changed the default to `1rem` (16px). That's a ~14.3% size increase propagating through every `em` value in the whole template.
+2. **`.container`'s max-width breakpoints**: Bootstrap 3 topped out at `max-width: 1170px` for any screen ≥1200px, with no further tier. Bootstrap 5 added a new `xxl` tier (≥1400px) at `max-width: 1320px` — 150px wider than Bootstrap 3 ever provided, at exactly the window sizes (like a 1854px-wide screenshot) where this surfaced during testing.
+
+This template's fixed "items per column" layout math (`utils/utils.js`'s `getMaxItemsForColumn`, and the hardcoded `/fi(n,size)` featured-image markers baked into `public/dsplay-data.js`'s mock menu, e.g. `/fi(3, 8)` in "Bebidas") was tuned against Bootstrap 3's narrower, smaller-base-font-size container — so both of these Bootstrap 5 defaults combined to make text and images measurably bigger at wide window sizes, causing the featured image to visually overlap the price row above it. Confirmed via direct DOM measurement (not just screenshots, since a ~1s per-category crossfade animation makes screenshot timing unreliable) that this was a *real*, reproducible, non-transitional layout difference — not a false alarm.
+
+Fixed both in `menu.sass`, right after the existing `.container` rule:
+```sass
+body
+  font-size: 14px
+
+@media (min-width: 768px)
+  .container
+    max-width: 750px
+@media (min-width: 992px)
+  .container
+    max-width: 970px
+@media (min-width: 1200px)
+  .container
+    max-width: 1170px
+```
+Verified via direct comparison against the original Bootstrap 3 build (git worktree at the pre-upgrade commit) at the exact window size (1854×927) where the bug was reported: `body`/`.container` computed font-size, `.row` width, and item title font-size are now byte-identical between old and new (14px / 1170px / 18.2px in both), and the featured-image `.ad-box` no longer overlaps the row above it. If `menu.sass`'s Bootstrap-class overrides are ever changed, re-verify at a window width ≥1400px specifically — that's where Bootstrap 5's extra `xxl` breakpoint diverges from Bootstrap 3's behavior, and where this regression was invisible at smaller test resolutions.
 
 ### Known pending bump: ESLint 9 -> 10
 

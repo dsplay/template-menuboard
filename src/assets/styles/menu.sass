@@ -16,6 +16,12 @@ html
 
 body
   height: 100%
+  // Bootstrap 3 set body's base font-size to 14px; Bootstrap 4+ (including 5)
+  // changed this default to 1rem (16px). Every em-based size in this
+  // stylesheet cascades from here, so leaving Bootstrap 5's default in place
+  // makes the entire template ~14% bigger than it was designed for. Restore
+  // Bootstrap 3's original base size explicitly.
+  font-size: 14px
 
 .pseudo-body
   width: 100%
@@ -48,6 +54,26 @@ body
   padding-top: 10px
   padding-bottom: 1em
   height: 90%
+
+// Restore Bootstrap 3's original .container max-width breakpoints. Bootstrap
+// 5's breakpoint table differs (notably a new >=1400px "xxl" tier capping at
+// 1320px, wider than Bootstrap 3 ever went - it topped out at 1170px for any
+// screen >=1200px). This template's fixed "items per column" layout math
+// (see utils/utils.js's getMaxItemsForColumn) was tuned against Bootstrap 3's
+// narrower container, so leaving Bootstrap 5's wider defaults in place makes
+// every em-based size (fonts, images, margins) scale up, and overflows the
+// pages built for the old, narrower assumption.
+@media (min-width: 768px)
+  .container
+    max-width: 750px
+
+@media (min-width: 992px)
+  .container
+    max-width: 970px
+
+@media (min-width: 1200px)
+  .container
+    max-width: 1170px
 
 .container .col-md-4
   float: left
