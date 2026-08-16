@@ -50,7 +50,7 @@ A [React](https://reactjs.org/) [HTML-based template](https://developers.dsplay.
 | `bgOpacityThreshold`    | string  | `75%`     | Gradient stop where the background starts fading to transparent.                                                        |
 | `image1` ... `image15`  | string  |           | Pool of images referenced by `/fi(n)`/`/li(n)` commands in menu item `num` fields (`image1` = `/fi(1)`, etc). |
 
-> Remember to also register these as Template Vars (same name and type) when configuring this template in the DSPLAY CMS. **`logo`, `currencySymbol`, `currencyMaxCols`, and `image1`...`image15` are read as direct `template.<key>` property access rather than through `tval()`, so `@dsplay/template-manifest`'s static scanner can't auto-detect them** — double check they're registered manually in the CMS.
+> Remember to also register these as Template Vars (same name and type) when configuring this template in the DSPLAY CMS. **`logo`, `currencySymbol`, `currencyMaxCols`, and `image1`...`image15` are read as direct `template.<key>` property access rather than through `tval()`, so [`@dsplay/template-manifest`](https://github.com/dsplay/template-manifest)'s static scanner can't auto-detect them** — double check they're registered manually in the CMS.
 
 ## Local development
 
