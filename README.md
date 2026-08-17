@@ -6,16 +6,21 @@ A [React](https://reactjs.org/) [HTML-based template](https://developers.dsplay.
 
 > Built with [Vite](https://vitejs.dev/), requires Node.js 22.22.2+, 24.15.0+, or 26+ (see `.nvmrc`).
 
+## Supported screen formats
+
+| Landscape | Portrait | Square |
+|-----------|----------|--------|
+| ![Landscape](docs/screenshots/landscape.png) | ![Portrait](docs/screenshots/portrait.png) | ![Square](docs/screenshots/square.png) |
+
+| Horizontal banner | Vertical banner |
+|--------------------|-------------------|
+| ![Horizontal Banner](docs/screenshots/h-banner.png) | ![Vertical Banner](docs/screenshots/v-banner.png) |
+
 ## Features
 
 - 4 layout modes, chosen automatically from screen orientation and the `screenSize` variable: 3 columns (horizontal, large), 2 columns (horizontal small, or vertical large), 1 column (vertical small).
 - Automatically distributes menu items/categories across columns and pages, rotating pages on an interval.
 - In-content commands inside an item's `num` field: `/cb` (column break), `/pb` (page break), `/n` (blank line), `/fi(n[,size])` (featured image, bordered), `/li(n[,size])` (layout image, undecorated).
-
-![Screenshot](docs/screenshot-01.png)
-![Screenshot](docs/screenshot-02.png)
-![Screenshot](docs/screenshot-03.png)
-![Screenshot](docs/screenshot-04.png)
 
 ## Template variables
 
